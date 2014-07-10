@@ -8,9 +8,15 @@
 ###   GOOGLE_PASSWORD="YOUR_PASSWORD"
 ###   GOOGLE_ACCOUNT_TYPE="GOOGLE" # Google Apps = HOSTED, gMail = GOOGLE
 . `dirname $0`/.archive_to_google_drive.conf
+echo "[INFO] Sourced `dirname $0`/.archive_to_google_drive.conf:"
+echo "    LIST_FILES_COMMAND:  $LIST_FILES_COMMAND"
+echo "    DELETE_COMMAND:      $DELETE_COMMAND"
+echo "    GOOGLE_USERNAME:     $GOOGLE_USERNAME"
+echo "    GOOGLE_ACCOUNT_TYPE: $GOOGLE_ACCOUNT_TYPE"
 
 # Zip filename
 ZIP_FILE=`dirname $0`/upload-`date +"%m-%d-%Y_%H-%M-%S"`.zip
+echo "[INFO] ZIP File: $ZIP_FILE"
 
 # Zip them up
 $LIST_FILES_COMMAND | xargs zip -q $ZIP_FILE
@@ -29,7 +35,8 @@ ZIP_FILE_MIME_TYPE=`file -b --mime-type $ZIP_FILE`
 # Google Drive stuff
 GOOGLE_LOGIN_TOKEN=`curl -s --data-urlencode Email=$GOOGLE_USERNAME --data-urlencode Passwd=$GOOGLE_PASSWORD -d accountType=$GOOGLE_ACCOUNT_TYPE -d service=writely -d source=cURL "https://www.google.com/accounts/ClientLogin" |  grep Auth | cut -d \= -f 2`
 GOOGLE_UPLOAD_URI=`curl -S -s -k --request POST -H "Content-Length: 0" -H "Authorization: GoogleLogin auth=${GOOGLE_LOGIN_TOKEN}" -H "GData-Version: 3.0" -H "Content-Type: $ZIP_FILE_MIME_TYPE" -H "Slug: $ZIP_FILE" "https://docs.google.com/feeds/upload/create-session/default/private/full?convert=false" -D /dev/stdout | grep "Location:" | sed s/"Location: "//`
-curl -o /dev/null -S -s -k --request POST --data-binary "@$ZIP_FILE" -H "Authorization: GoogleLogin auth=${GOOGLE_LOGIN_TOKEN}" -H "GData-Version: 3.0" -H "Content-Type: $ZIP_FILE_MIME_TYPE" -H "Slug: $ZIP_FILE" "$GOOGLE_UPLOAD_URI"
+curl -o /dev/null -S -s -k --request POST -T "$ZIP_FILE" -H "Authorization: GoogleLogin auth=${GOOGLE_LOGIN_TOKEN}" -H "GData-Version: 3.0" -H "Content-Type: $ZIP_FILE_MIME_TYPE" -H "Slug: $ZIP_FILE" "$GOOGLE_UPLOAD_URI"
+#curl -o /dev/null -S -s -k --request POST --data-binary "@$ZIP_FILE" -H "Authorization: GoogleLogin auth=${GOOGLE_LOGIN_TOKEN}" -H "GData-Version: 3.0" -H "Content-Type: $ZIP_FILE_MIME_TYPE" -H "Slug: $ZIP_FILE" "$GOOGLE_UPLOAD_URI"
 
 rm -f $ZIP_FILE
 
