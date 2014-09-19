@@ -8,7 +8,7 @@
 ###   GOOGLE_PASSWORD="YOUR_PASSWORD"
 ###   GOOGLE_ACCOUNT_TYPE="GOOGLE" # Google Apps = HOSTED, gMail = GOOGLE
 . `dirname $0`/.archive_to_google_drive.conf
-echo "[INFO] Sourced `dirname $0`/.archive_to_google_drive.conf:"
+echo "[$(date)] [INFO] Sourced `dirname $0`/.archive_to_google_drive.conf:"
 echo "    LIST_FILES_COMMAND:  $LIST_FILES_COMMAND"
 echo "    DELETE_COMMAND:      $DELETE_COMMAND"
 echo "    GOOGLE_USERNAME:     $GOOGLE_USERNAME"
@@ -16,13 +16,13 @@ echo "    GOOGLE_ACCOUNT_TYPE: $GOOGLE_ACCOUNT_TYPE"
 
 # Zip filename
 ZIP_FILE=`dirname $0`/upload-`date +"%m-%d-%Y_%H-%M-%S"`.zip
-echo "[INFO] ZIP File: $ZIP_FILE"
+echo "[$(date)] [INFO] ZIP File: $ZIP_FILE"
 
 # Zip them up
 $LIST_FILES_COMMAND | xargs zip -q $ZIP_FILE
 
 if [ ! -f $ZIP_FILE ]; then
-  echo "[ERROR] There are not any files matching your search or we were unable to create the archive file"
+  echo "[$(date)] [ERROR] There are not any files matching your search or we were unable to create the archive file"
   exit 1
 fi
 
@@ -41,7 +41,7 @@ curl -o /dev/null -S -s -k --request POST -T "$ZIP_FILE" -H "Authorization: Goog
 rm -f $ZIP_FILE
 
 if [ $? -ne 0 ]; then
-   echo "[ERROR] There was an error in uploading the file."
+   echo "[$(date)] [ERROR] There was an error in uploading the file."
    exit 1
 fi
 
