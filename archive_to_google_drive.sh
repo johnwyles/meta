@@ -2,11 +2,11 @@
 
 ### IMPORTANT: You will need to create a a conf file named ".archive_to_google_drive.conf" 
 ### in the same directory as this script.  The contents should resemble:
-###   LIST_FILES_COMMAND="find /PATH/TO/FILES -type f -mtime +7 -print"        # Prints all files older than 7 days
-###   DELETE_COMMAND="find /PATH/TO/FILES -type f -mtime +7 -exec rm -rf {} \; # Removes all files older than 7 days 
+###   FILES_PATH="/PATH/TO/FILES"            # Prints all files older than 7 days
+###   DAYS_EXPIRE=7                          # Number of days to keep locally
 ###   GOOGLE_USERNAME="YOUR_EMAIL@gmail.com"
 ###   GOOGLE_PASSWORD="YOUR_PASSWORD"
-###   GOOGLE_ACCOUNT_TYPE="GOOGLE" # Google Apps = HOSTED, gMail = GOOGLE
+###   GOOGLE_ACCOUNT_TYPE="GOOGLE"           # Google Apps = HOSTED, gMail = GOOGLE
 . `dirname $0`/.archive_to_google_drive.conf
 
 LIST_FILES_COMMAND="find $FILES_PATH -type f -print"
