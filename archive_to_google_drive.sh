@@ -8,7 +8,13 @@
 ###   GOOGLE_PASSWORD="YOUR_PASSWORD"
 ###   GOOGLE_ACCOUNT_TYPE="GOOGLE" # Google Apps = HOSTED, gMail = GOOGLE
 . `dirname $0`/.archive_to_google_drive.conf
+
+LIST_FILES_COMMAND="find $FILES_PATH -type f -print"
+DELETE_COMMAND="find $FILES_PATH -type f -mtime +$DAYS_EXPIRE -exec rm -rf {} +"
+
 echo "[$(date)] [INFO] Sourced `dirname $0`/.archive_to_google_drive.conf:"
+echo "    FILES_PATH:          $FILES_PATH"
+echo "    DAYS_EXPIRE:         $DAYS_EXPIRE"
 echo "    LIST_FILES_COMMAND:  $LIST_FILES_COMMAND"
 echo "    DELETE_COMMAND:      $DELETE_COMMAND"
 echo "    GOOGLE_USERNAME:     $GOOGLE_USERNAME"

@@ -1,0 +1,5 @@
+FILES_PATH="/Users/yourname/path/to/your/files"
+DAYS_EXPIRE=7
+GOOGLE_USERNAME="youremail@gmail.com"
+GOOGLE_PASSWORD="yourpassword"
+GOOGLE_ACCOUNT_TYPE="HOSTED" # Google Apps = HOSTED, GMail=GOOGLE
